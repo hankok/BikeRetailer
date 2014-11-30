@@ -1,0 +1,91 @@
+item number=#31-1583
+category=Path and Pavement Bike
+bike price=599.99
+bike name=GT Transeo 4.0 Women's Comfort Bike - 2014
+bike description=
+The 2014 GT Transeo 4.0 women's comfort bike is designed to handle it all. It's ideal for cruising the neighborhood or bike path, taking leisurely spins down country roads, and even exploring some light fire roads or two-track.
+
+item number=#31-1586
+category=Path and Pavement Bike
+bike price=459.99
+bike name=Schwinn Searcher 4 Comfort Bike - 2014
+bike description=
+A comfortable all around town bike that's good for commuting, working out, or running errands, the Schwinn Searcher 4 is fully loaded, and a great all-around choice for riding. A lightweight aluminum frame and forgiving suspension fork means you can ride on pavement or light gravel roads without much thought regarding durability. With comfort features like an ergonomic saddle and grips, and EZ Fire Shimano shifters, it's easy to see why the Searcher 4 is one of our best-selling bike models.
+
+item number=#31-1614
+category=Path and Pavement Bike
+bike price=449.99
+bike name=Fuji Traverse 1.8 Women's Sport Hybrid Bike - 2014 Performance Exclusive
+bike description=
+Versatility is not always easy to find in today's world of specialization. This is especially true in the world of cycling. Fuji has an answer for those who are looking for a bike that is excellent for fitness, but is also versatile, comfortable, and of good quality for recreation: The Fuji Traverse 1.8 Sport Hybrid Bike; and it's available exclusively at Performance.
+
+item number=#31-1615
+category=Path and Pavement Bike
+bike price=459.99
+bike name=Schwinn Searcher 4 Women's Comfort Bike - 2014
+bike description=
+A comfortable all around town bike that's good for commuting, working out, or running errands, the Women's Schwinn Searcher 4 is fully loaded, and a great all-around choice for riding. A lightweight aluminum frame with women's specific geometry and forgiving suspension fork means you can ride on pavement or light gravel roads without much thought regarding durability. With comfort features like an ergonomic women's saddle and grips, and EZ Fire Shimano shifters, it's easy to see why the Searcher 4 is one of our best-selling bike models.
+
+item number=#31-1616
+category=Path and Pavement Bike
+bike price=599.99
+bike name=GT Transeo 4.0 Comfort Bike - 2014
+bike description=
+Want a bike that's ideal for cruising the neighborhood or bike path? Taking a leisurely spin down country roads? Exploring fire roads or two-track? The 2014 GT Transeo 4.0 comfort bike is designed to handle it all.
+
+item number=#31-1617
+category=Path and Pavement Bike
+bike price=649.99
+bike name=Diamondback Calico Sport Women's Flat Bar Road Bike - 2014 Performance Exclusive
+bike description=
+The Calico Sport is perfect for exploring the neighborhood or cruising the local bike path for challenging back road adventures. The Diamondback Calico Sport Women's Bike combines mountain bike-like geometry with the efficiency of larger 700c wheels for versatility on or off the road.
+
+item number=#31-1651
+category=Path and Pavement Bike
+bike price=439.99
+bike name=Schwinn Voyageur 2 Women's Comfort Bike - 2014
+bike description=
+The Schwinn Voyageur 2 women's comfort bike is specifically designed for fun, fitness and utility with a steady dose of comfort wherever you go. The Voyageur 2 comfort bike features a lightweight aluminum frame with an upright riding position, a bump-absorbing suspension seatpost with 50mm of travel and Selle Royal comfort elastomer saddle. An easy shifting 21-speed drivetrain with SRAM Grip Shift shifters gets you up to speed fast and makes it easy to maintain your momentum no matter what the terrain.
+
+item number=#31-1661
+category=Path and Pavement Bike
+bike price=439.99
+bike name=Schwinn Voyageur 2 Comfort Bike - 2014
+bike description=
+The 2014 Schwinn Voyageur 2 comfort bike is specifically designed for fun, fitness and utility with a steady dose of comfort wherever you go. The Voyageur 2 comfort bike features a lightweight aluminum frame with an upright riding position, a bump-absorbing suspension seatpost with 50mm of travel and Selle Royal comfort elastomer saddle. An easy shifting 21-speed drivetrain with SRAM Grip Shift shifters gets you up to speed fast and makes it easy to maintain your momentum no matter what the terrain.
+
+item number=#31-1668
+category=Path and Pavement Bike
+bike price=499.99
+bike name=Miir Payette Single-Speed Road Bike - 2014
+bike description=
+The Miir Payette will take you through the city with grace and style. Based around the most proven bicycle frame material and featuring the simplest of drivetrains, this bicycle promises years of head-turning attractiveness and the smoothest ride out there.
+
+item number=#31-1705
+category=Path and Pavement Bike
+bike price=691.99
+bike name=GT Transeo 3.0 Comfort Bike - 2014
+bike description=
+If you want a bike that can do a little bit of everything, but do it well, look no further than the 2014 GT Transeo comfort bike. The GT Transeo 3.0 comfort bike is one of the most popular bikes we sell. Probably because it does so many things so well. Want a bike that's ideal for cruising the neighborhood or bike path? Taking a leisurely spin down country roads? Exploring fire roads or two-track? The Transeo 3.0 is designed to handle it all.
+
+item number=#31-1706
+category=Path and Pavement Bike
+bike price=674.99
+bike name=Fuji Traverse 1.6 Women's Sport Hybrid Bike - 2014 Performance Exclusive
+bike description=
+Fuji has an answer for those who are looking for a bike that is excellent for fitness, but is also versatile, comfortable, and of good quality for recreation: The 2014 Fuji Traverse 1.6 Sport Hybrid Bike with women's frame geometry.
+
+item number=#31-1707
+category=Path and Pavement Bike
+bike price=449.99
+bike name=Fuji Traverse 1.8 Sport Hybrid Bike - 2014 Performance Exclusive
+bike description=
+Versatility is not always easy to find in today's world of specialization. This is especially true in the world of cycling. Fuji has an answer for those who are looking for a bike that is excellent for fitness, but is also versatile, comfortable, and of good quality for recreation: The Fuji Traverse 1.8 Sport Hybrid Bike; and it's available exclusively at Performance.
+
+item number=#31-2653
+category=Path and Pavement Bike
+bike price=699.99
+bike name=Detroit Bikes A-Type City Bike
+bike description=
+Riding a bike is simple. Whether you are biking a twenty-mile commute to work everyday or haven't touched a bike in fifteen years, Detroit bikes is built with you in mind. The A-Type is light and strong. A minimalist bike with features that enhance its durability and quality of ride. Detroit Bikes are built in a city with manufacturing prowess and deep traditions of bicycle production, touring, recreational riding, commuting, and racing. The prototype was constructed in a coach house off Woodward Avenue, a couple of blocks from where Henry Ford once lived. They cut, cope, bend, weld, paint, assemble and package each bike in their 50,000 square-foot factory in west Detroit. And you? You ride them joyfully wherever the road takes you.
+
