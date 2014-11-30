@@ -80,7 +80,10 @@ public class DBHelper {
 		stmt.setInt(1, qty);
 		stmt.setString(2, model);
 		try {
-			stmt.executeUpdate();
+			int cnt = stmt.executeUpdate();
+			if (cnt != 1) {
+				throw new SQLException("Model number <" + model + "> is invalid");
+			}
 		} catch (MysqlDataTruncation ex) {
 			System.out.println("Not enough quantity to update model " + model + " by " + qty);
 			return false;
