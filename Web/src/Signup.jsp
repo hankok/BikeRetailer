@@ -17,7 +17,7 @@
       <h1>
       	Sign Up
       </h1>
-      <form id="form" name="form" method="get" action="Signup">
+      <form id="form" name="form" method="get" action="signup">
          <table>
                 <tr>
                     <td>Enter your Username (email id):</td>
