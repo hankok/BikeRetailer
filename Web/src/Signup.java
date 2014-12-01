@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Entity.Bike;
 import Entity.Order;
 import Entity.User;
 import Operation.FileUtils;

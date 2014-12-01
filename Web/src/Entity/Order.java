@@ -1,13 +1,15 @@
 package Entity;
 
 public class Order {
+	String orderID;
 	String customerName;
 	String address;
 	String item;
 	int quantity;
 	String status;
 
-	public Order(String customerName, String address, String item, int quantity, String stauts) {
+	public Order(String orderID, String customerName, String address, String item, int quantity, String stauts) {
+		this.orderID = orderID;
 		this.customerName = customerName;
 		this.address = address;
 		this.item = item;

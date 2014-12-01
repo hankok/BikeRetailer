@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.util.ArrayList;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -13,22 +15,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Entity.Bike;
 
 @WebServlet("/ViewInventory")
 public class ViewInventory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static ArrayList<Bike> allList = new ArrayList<Bike>();
-	static ArrayList<Bike> allList1 = new ArrayList<Bike>();
-	static ArrayList<Bike> allList2 = new ArrayList<Bike>();
+		
 	public static class ComparatorPrice implements Comparator<Object> {
 		public int compare(Object arg0, Object arg1) {
 			Bike bike0 = (Bike) arg0;
 			Bike bike1 = (Bike) arg1;
 
-			if (bike0.price == bike1.price) {
+			if (bike0.getPrice() == bike1.getPrice()) {
 				return 0;
-			} else if (bike0.price > bike1.price) {
+			} else if (bike0.getPrice() > bike1.getPrice()) {
 				return 1;
 			} else {
 				return -1;
@@ -40,10 +39,11 @@ public class ViewInventory extends HttpServlet {
 		public int compare(Object arg0, Object arg1) {
 			Bike bike0 = (Bike) arg0;
 			Bike bike1 = (Bike) arg1;
-			return bike0.itemNo.compareTo(bike1.itemNo);
+			return bike0.getModelNumber().compareTo(bike1.getModelNumber());
 		}
 	}
-	
+
+	/* TODO - add bike name in DB
 	public static class ComparatorBikeName implements Comparator<Object> {
 		public int compare(Object arg0, Object arg1) {
 			Bike bike0 = (Bike) arg0;
@@ -51,8 +51,9 @@ public class ViewInventory extends HttpServlet {
 			return bike0.name.compareTo(bike1.name);
 		}
 	}
+	*/
 	
-	public static String sortByPrice(ArrayList<Bike> bikelist) {
+	public static String sortByPrice(List<Bike> bikelist) {
 		ComparatorPrice comparator = new ComparatorPrice();
 		Collections.sort(bikelist, comparator);
 
@@ -65,7 +66,8 @@ public class ViewInventory extends HttpServlet {
 		return ret;
 	}
 	
-	public static String sortByName(ArrayList<Bike> bikelist) {
+	/*TODO - add bike name in DB
+	public static String sortByName(List<Bike> bikelist) {
 		ComparatorBikeName comparator = new ComparatorBikeName();
 		Collections.sort(bikelist, comparator);
 
@@ -77,18 +79,19 @@ public class ViewInventory extends HttpServlet {
 		}
 		return ret;
 	}
+	*/
 
-	void showInventory(String orderby, ArrayList<Bike> allList, PrintWriter out)
+	void showInventory(String orderby, List<Bike> bikes, PrintWriter out)
 	{
 		String allbike = "";
 		
 		if(orderby.equals("2") )
 		{
-			allbike = sortByName(allList);
+			//allbike = sortByName(allList); 
 		}
 		else
 		{
-			allbike = sortByPrice(allList);
+			allbike = sortByPrice(bikes);
 		}
 		
 		String title = "View Inventory";
@@ -97,89 +100,37 @@ public class ViewInventory extends HttpServlet {
 				+ allbike + "</p>");
 		out.print("</body></html>");
 	}
+	
+	public List<Bike> getBikeInfoFromRetailDB() throws RemoteException
+	{
+		List<Bike> bikes;
+		
+		try {
+			DBHelper dbHelper =  (DBHelper) getServletContext().getAttribute("dbHelper");
+			bikes = dbHelper.getAllBikes();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RemoteException("Exception occured when accessing the database", e);
+		}
+		return bikes;
+	}
+
+	/* may be usefull for mem sort
+	public static int findBike(List<Bike> lst, String itemNo) {		
+		ComparatorItemNo comparator = new ComparatorItemNo();
+		Collections.sort(lst, comparator);
+		int index = Collections.binarySearch(lst, new Bike(itemNo, "",0,(float)0,"",""), comparator);
+		return index;
+	}
+	*/
+	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setCharacterEncoding("text/html;chaset=gbk");
 		String orderby = request.getParameter("orderby");
 
-		String url="rmi://127.0.0.1/Hello1"; 
-		SupplyServer ss = null;
-		try {
-			ss = (SupplyServer)Naming.lookup(url);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			if(!allList.isEmpty())
-			{
-				showInventory(orderby, allList, out);
-			}
-			else
-			{
-				out.print("<html><body><h1>" + "ERROR" 
-						+ "</h1><li>"
-						+ "Data is not cached, need to view Inventory success at least once.sup1" + "</li>");
-				out.print("</body></html>");			
-			}
-			return;
-		}
-		if(ss == null)
-		{
-			if(!allList.isEmpty())
-			{
-				showInventory(orderby, allList, out);
-			}
-			else
-			{
-				out.print("<html><body><h1>" + "ERROR" 
-						+ "</h1><li>"
-						+ "Data is not cached, need to view Inventory success at least once.sup1" + "</li>");
-				out.print("</body></html>");
-			}
-			return;
-		}
-		allList1 = ss.getInventorySup();
-		
-		// should fetch from another rmi server 
-		url="rmi://127.0.0.1/Hello2";
-		ss = null;
-		try {
-			ss = (SupplyServer)Naming.lookup(url);
-		} catch (Exception e) {
-			//e.printStackTrace();
-
-			if(!allList.isEmpty())
-			{
-				showInventory(orderby, allList, out);
-			}
-			else
-			{
-				out.print("<html><body><h1>" + "ERROR" 
-						+ "</h1><li>"
-						+ "Data is not cached, need to view Inventory success at least once.sup2" + "</li>");
-				out.print("</body></html>");
-			}
-			return;
-		}
-		if(ss == null)
-		{
-			if(!allList.isEmpty())
-			{
-				showInventory(orderby, allList, out);
-			}
-			else
-			{
-				out.print("<html><body><h1>" + "ERROR" 
-						+ "</h1><li>"
-						+ "Data is not cached, need to view Inventory success at least once.sup2" + "</li>");
-				out.print("</body></html>");
-			}
-			return;
-		}		
-		allList2 = ss.getInventorySup();
-		allList.clear();
-		allList.addAll(allList1);
-		allList.addAll(allList2);
-		showInventory(orderby, allList, out);
+		List<Bike> bikes = getBikeInfoFromRetailDB();
+		showInventory(orderby, bikes, out);
 	}
 }

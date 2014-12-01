@@ -1,4 +1,4 @@
-package edu.cmu.bikeretailer.warehouse;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import com.mysql.jdbc.MysqlDataTruncation;
 
-import edu.cmu.bikeretailer.api.Bike;
 
 /**
  * 

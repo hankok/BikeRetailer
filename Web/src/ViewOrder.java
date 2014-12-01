@@ -84,15 +84,6 @@ public class ViewOrder extends HttpServlet {
 			out.print("</body></html>");
 		}
 		
-/*		if(customerName.isEmpty())
-		{// user didn't input, show all orders
-			out.print("<html><body><h1>" + title
-					+ "</h1><p>"
-					+ getOrders() + "</p>");
-			out.print("</body></html>");
-			
-		}*/
-		
 		if(!customerName.isEmpty())
 		{
 			// show the order with input name

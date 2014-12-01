@@ -20,16 +20,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Entity.Bike;
 import Entity.Order;
-import Operation.FileUtils;
-import Operation.Supplies;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.sql.SQLException;
+import java.util.Date;
+
+import edu.cmu.bikeretailer.warehouse.DBHelper;
+import edu.cmu.bikeretailer.api.WarehouseInterface;
 
 @WebServlet("/PlaceOrder")
 public class PlaceOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	SupplyServer ss1 = null;
-	SupplyServer ss2 = null;
 	Timer timer;
 	
 	public static boolean isNumeric(String str) {
@@ -43,39 +48,12 @@ public class PlaceOrder extends HttpServlet {
 		return true;
 	}
 	
-	boolean connectRMI() throws RemoteException
-	{
-		Boolean isConnLost = true;
-		String url="rmi://127.0.0.1/Hello1"; // find from supplier1
-
-		try {
-			ss1 = null;
-			ss1 = (SupplyServer)Naming.lookup(url);
-		} catch (Exception e) {
-			e.printStackTrace();
-			isConnLost = false;
-		}
-		if(ss1 == null)
-		{
-
-			isConnLost = false;
-		}
-	
-		url="rmi://127.0.0.1/Hello2"; // find from supplier2
-		try {
-			ss2 = null;
-			ss2 = (SupplyServer)Naming.lookup(url);
-		} catch (Exception e) {
-			e.printStackTrace();
-			isConnLost = false;
-		}
-		if(ss2 == null)
-		{
-
-			isConnLost = false;
-		}
-		return isConnLost;
+	public boolean insertOrder(String values) {
+		
+		
+		return true;
 	}
+
 	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -86,16 +64,6 @@ public class PlaceOrder extends HttpServlet {
 		String itemNosByComma = request.getParameter("itemNo");
 		String sQuantitysByComma = request.getParameter("sQuantity");
 		
-
-		/*
-		String customerName = request.getParameter("customerName");
-		String Address = request.getParameter("Address");
-		String City = request.getParameter("City");
-		String State = request.getParameter("State");
-		String Zipcode = request.getParameter("Zipcode");
-		
-		String addr = Address + ". " + City + ". " + State + ". " + Zipcode;
-		*/
 		String customerName = "";
 		String addr = "";
 		String username = "";
@@ -120,49 +88,24 @@ public class PlaceOrder extends HttpServlet {
 
 		if(itemNos.length == sQuantitys.length)
 		{
-			boolean isConnLost = !connectRMI();
+			//boolean isConnLost = !connectRMI();
 
-			ArrayList<Bike> allList1 = new ArrayList<Bike>();
-			
-			ArrayList<Bike> allList2 = new ArrayList<Bike>();
-			
-			if(isConnLost)
-			{
-				allList1 = ViewInventory.allList1;
-				allList2 = ViewInventory.allList2;
-				if(allList1.isEmpty() || allList2.isEmpty())
-				{
-					out.print("<html><body><h1>" + "INFO - Remote Connection lost and No Local Cache" 
-							+ "</h1><li>"
-							+ "You must at least successfully viewing Inventory once to have them cached." + "</li>");
-					out.print("</body></html>");
-					return;
-				}
-			}
-			else
-			{
-				allList1 = ss1.getInventorySup();
-				allList2 = ss2.getInventorySup();
-			}
-
-			
-			String sQuantity = "";
 			String itemNo = "";
-			int quantity = 1;
+			int quantity = 0;
+			
 			int nTypes = itemNos.length;
-			String bikeNames[] = new String[nTypes];
-			int quantitys[] = new int[nTypes];
-			int indexs1[] = new int[nTypes];
-			int indexs2[] = new int[nTypes];
+			// TODO - when name added
+			//String bikeNames[] = new String[nTypes];
+			String values = "";
 			for(int i = 0; i<nTypes; i++)
 			{
-			    sQuantity = sQuantitys[i];
+				String sQuantity = sQuantitys[i];
 				itemNo = itemNos[i];
 
-				
 				if(!isNumeric(sQuantity))
 				{
 					System.out.print("Quantity is not a number, will purchase 1 for you.\n");
+					sQuantity = "1";
 				}
 				else
 				{
@@ -170,100 +113,22 @@ public class PlaceOrder extends HttpServlet {
 					if(quantity<1)
 					{
 						System.out.print("Quantity is less than 1, will purchase 1 for you.\n");
-						quantity = 1;
+						sQuantity = "1";
 					}
 				}
-				quantitys[i] = quantity;
-
-				indexs1[i] = Inventory.findBike(allList1, itemNo);
-				
-				if(indexs1[i]<0)
-				{
-					indexs2[i] = Inventory.findBike(allList2, itemNo);
-					
-					if(indexs2[i]<0)
-					{
-						out.print("<html><body><h1>" + "INFO" 
-								+ "</h1><li>"
-								+ "No such bicycle available." + "</li>");
-						out.print("</body></html>");
-						return;
-					}
-					bikeNames[i] = allList2.get(indexs2[i]).name;
-					if(quantity>allList2.get(indexs2[i]).inventory)
-					{
-						out.print("<html><body><h1>" + "INFO" 
-								+ "</h1><li>"
-								+ "Out of Stock." + "</li>");
-						out.print("</body></html>");
-						return;
-					}
-				}
-				else
-				{
-					bikeNames[i] = allList1.get(indexs1[i]).name;
-					if(quantity>allList1.get(indexs1[i]).inventory)
-					{
-						out.print("<html><body><h1>" + "INFO" 
-								+ "</h1><li>"
-								+ "Out of Stock." + "</li>");
-						out.print("</body></html>");
-						return;
-					}
-				}
+				values += "(" + sQuantity + "," + itemNo + "),";				
 			}
-			 
-			if(!isConnLost)
-			{
-				for(int i = 0; i<nTypes; i++)
-				{
-					if(indexs1[i]>=0)
-					{
-						if(!ss1.placeOrder(itemNos[i], quantitys[i], customerName))
-						{
-							out.print("<html><body><h1>" + "INFO" 
-									+ "</h1><li>"
-									+ "Out of stock-sup1-ERROR-." +itemNos[i] + "-"+ quantitys[i] +"-"+customerName+ "</li>");
-							out.print("</body></html>");
-							return;
-						}
-					}
-					else
-					{
-						if(!ss2.placeOrder(itemNos[i], quantitys[i], customerName))
-						{
-							out.print("<html><body><h1>" + "INFO" 
-									+ "</h1><li>"
-									+ "Out of stock-sup2-ERROR-." +itemNos[i] + "-"+ quantitys[i] +"-"+customerName+ "</li>");
-							out.print("</body></html>");
-							return;
-						}
-					}
-				}
-			}
+			values = values.substring(0, values.length()-1); // trim the last comma
 			
-			String sbikeNames = "";
-			for(int i=0; i<nTypes; i++)
-			{
-				sbikeNames += bikeNames[i];
+			/* TODO - order table
+			try {
+				DBHelper dbhelper =  (DBHelper) getServletContext().getAttribute("dbHelper");
+				bikes = dbhelper.insertOrder(values);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new RemoteException("Exception occured when accessing the database", e);
 			}
-				
-			if(isConnLost)
-			{
-				Order order = new Order(customerName, addr, itemNosByComma+"%"+ sQuantitysByComma +"%"+sbikeNames, quantity, "Pending"); 
-				FileUtils.writeFile(order.toString(), "data/OrderPending.txt", true);			
-			}
-			else
-			{
-				Order order = new Order(customerName, addr, itemNosByComma+"% "+ sQuantitysByComma +"% "+sbikeNames, quantity, "In process"); 
-				FileUtils.writeFile(order.toString(), "data/Order.txt", true);
-			}
-			
-			out.print("<html><body><h1>" + "INFO" 
-					+ "</h1><li>"
-					+ "Order sent to Supplier. " + customerName + "  "+ addr +"</li>");
-			out.print("</body></html>");
-
+			*/
 		}
 		
 		return;
