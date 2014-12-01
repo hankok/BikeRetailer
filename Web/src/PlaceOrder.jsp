@@ -19,29 +19,45 @@
         Place Order
       </h1>
       <form id="form" name="form" method="get" action="placeOrder">
-        <label>
-          itemNo:
-        </label>
-        <input name="itemNo" type="text" />
+      <table>
+      <tr>
+      <td>
+      itemNo:
+      </td>
+      <td>
+      <input name="itemNo" type="text" />
+      </td>
+      </tr>
+      <tr>
+      <td>
+      Quantity:
+      </td>
+      <td>
+       <input name="sQuantity" type="text" />
+      </td>
+      </tr>
+      <tr>
+      <td>
+      Customer Name - Fisrt/Last:
+      </td>
+      <td>
+       <%= session.getAttribute("customerName") %>
+      </td>
+      </tr>
+      <tr>
+      <td>
+       Address:
+      </td>
+      <td>
+       <%= session.getAttribute("address") %>
+      </td>
+      </tr>
+      <tr>
+      <td></td>
+      <td><input name="submit" type="submit"/></td>
+      </tr>
+      </table>
         
-        <label>
-          Quantity:
-        </label>
-        <input name="sQuantity" type="text" />
-      
-        <label>
-          Customer Name - Fisrt/Last:
-        </label>
-        <%= session.getAttribute("customerName") %>
-					
-        <label>
-          Address:
-        </label>
-        <%= session.getAttribute("address") %>
-
-
-        <input name="submit" type="submit"/>
-       
       </form>
       <br>
       Buy 2 or more types of bikes? Input the itemNo and Quantity seperated by comma as follows: 

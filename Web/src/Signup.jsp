@@ -17,47 +17,44 @@
       <h1>
       	Sign Up
       </h1>
-      <form id="form" name="form" method="get" action="signup">
-        <label>
-          username:
-        </label>
-        <input name="username" type="text" />
-        
-        <label>
-          password:
-        </label>
-        <input name="password" type="text" />
-      
-        <label>
-          Name - Fisrt/Last:
-        </label>
-        <input name="customerName" type="text" />
-        
-        <label>
-          Address:
-        </label>
-        <input name="Address" type="text" />
-
-        <label>
-          City:
-        </label>
-        <input name="City" type="text" />
-        
-        <label>
-          State:
-        </label>
-        <input name="State" type="text" />
-
-        <label>
-          Zipcode:
-        </label>
-        <input name="Zipcode" type="text" />
-
-        <input name="signup" type="submit"/>
-        
+      <form id="form" name="form" method="get" action="Signup">
+         <table>
+                <tr>
+                    <td>Enter your Username (email id):</td>
+                    <td><input type=text name=username></td>
+                </tr>
+                <tr>
+                    <td>Enter your Password:</td>
+                    <td><input type=password name=password></td>
+                </tr>
+                <tr>
+                    <td>Enter your Name (First/Last):</td>
+                    <td><input type=text name=customerName></td>
+                </tr>
+                <tr>
+                    <td>Enter your Address:</td>
+                    <td><input type=text name=Address></td>
+                </tr>
+                <tr>
+                    <td>Enter your City:</td>
+                    <td><input type=text name=City></td>
+                </tr>
+                                <tr>
+                    <td>Enter your State:</td>
+                    <td><input type=text name=State></td>
+                </tr>
+                                <tr>
+                    <td>Enter your Zipcode:</td>
+                    <td><input type=text name=Zipcode></td>
+                </tr>
+                <tr>
+	                <td><input type=reset value=Refresh></td>
+                    <td><input type=submit value=Submit></td>
+                </tr>
+            </table>
         
       </form>
-
+If already a member: <a href="/Final_AWS/Login.jsp">Log in</a>
     </center>
   </body>
 </html>

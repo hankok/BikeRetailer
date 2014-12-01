@@ -19,11 +19,17 @@
         View Inventory
       </h1>
       <form id="form" name="form" method="get" action="viewInventory">
-        <select name="orderby" onchange="" style="width:180px; margin-left:-20px; ">
+      <table>
+      <tr>
+      <td> <select name="orderby" onchange="" style="width:180px; margin-left:-20px; ">
                    <option value="1">OrderBy Price</option>
                    <option value="2">OrderBy BikeName</option>
 	    </select>
-        <input name="View Inventory" type="submit"/>
+	    </td>
+	    <td><input name="View Inventory" type="submit" value=Submit/>
+	    </td>
+      </tr>
+      </table>
       </form>
       <br>
       <br>

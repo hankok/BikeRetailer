@@ -19,12 +19,12 @@
         View Order
       </h1>
       <form id="form" name="form" method="get" action="viewOrder">
-        <label>
-          View my order:
-        </label>
-
-        <input name="submit" type="submit"/>
-       
+       <table>
+                <tr>
+                    <td> View my order:</td>
+                    <td> <input name="submit" type="submit" value=View/></td>
+                </tr>
+          </table>
       </form>
       <br>
       <br>

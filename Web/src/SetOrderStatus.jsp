@@ -18,18 +18,20 @@
       Set Order Status
       </h1>
       <form id="form" name="form" method="get" action="setOrderStatus">
-        <label>
-          Order Index:
-        </label>
-        <input name="sindex" type="text" />
-
-        <label>
-          Order status:
-        </label>
-        <input name="status" type="text" />
-
-        <input name="submit" type="submit"/>
-
+      <table>
+      <tr>
+      <td>Order Index:</td>
+      <td> <input name="sindex" type="text" /></td>
+      </tr>
+      <tr>
+      <td>Order status:</td>
+      <td><input name="status" type="text" /></td>
+      </tr>
+      <tr>
+      <td></td>
+      <td><input name="submit" type="submit" value=Submit/></td>
+      </tr>
+      </table>
       </form>
               
       <br>
