@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,48 +21,16 @@ import Operation.FileUtils;
 public class ViewOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public static String[] loadOrder() throws IOException {
-    	String order = FileUtils.readFile("data/Order.txt");
-    	return order.split("\n");
-	}
 	
-	public String getOrders(String customerName) throws IOException {
-		String orders[] = loadOrder();
-		String ret = "";
-
-		if(orders.length == 1 && orders[0].trim().equals(""))
+	public String getOrders(String username) throws IOException, SQLException {
+		DBHelper dbhelper =  (DBHelper) getServletContext().getAttribute("dbHelper");
+		Vector<String> vOrder = dbhelper.getOrders(username);
+		String orders = "";
+		for(int i=0; i< vOrder.size(); i++)
 		{
-			return ret;
+			orders += vOrder.get(i) + "<br>";
 		}
-		
-		for(int i=0; i<orders.length; i++)
-		{
-			int pos0 = orders[i].indexOf(";");
-			int pos1 = orders[i].indexOf(";", pos0 + 1);
-
-			if(customerName.equals(orders[i].substring(pos0 + 1, pos1).trim()))
-			{
-				ret += orders[i] + "<br><br>";
-				System.out.println(orders[i]);
-			}
-		}
-		return ret;
-	}
-	
-	public String getOrders() throws IOException {
-		String orders[] = loadOrder();
-		String ret = "";
-
-		if(orders.length == 1 && orders[0].trim().equals(""))
-		{
-			return ret;
-		}
-		
-		for(int i=0; i<orders.length; i++)
-		{
-			ret += "(" + Integer.toString(i) + ")" + orders[i] + "<br><br>";
-		}
-		return ret;
+		return orders;
 	}
 	
 	protected void doGet(HttpServletRequest request,
@@ -71,10 +41,10 @@ public class ViewOrder extends HttpServlet {
 		String title = "View Order";
 		//String customerName = request.getParameter("customerName");
 		
-		String customerName = "";
+		String username = "";
 		try{
 			HttpSession session = request.getSession(false);
-			customerName = session.getAttribute("customerName").toString();
+			username = session.getAttribute("username").toString();
 		}
 		catch(Exception e)
 		{
@@ -84,12 +54,17 @@ public class ViewOrder extends HttpServlet {
 			out.print("</body></html>");
 		}
 		
-		if(!customerName.isEmpty())
+		if(!username.isEmpty())
 		{
 			// show the order with input name
-			out.print("<html><body><h1>" + title
-					+ "</h1><p>"
-					+ getOrders(customerName) + "</p>");
+			try {
+				out.print("<html><body><h1>" + title
+						+ "</h1><p>"
+						+ getOrders(username) + "</p>");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			out.print("</body></html>");
 		}
 

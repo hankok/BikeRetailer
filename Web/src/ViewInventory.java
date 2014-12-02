@@ -19,7 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ViewInventory")
 public class ViewInventory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-		
+	List<Bike> bikes = null;
+	String bikesByName = null;
+	String bikesByPrice = null;
+
 	public static class ComparatorPrice implements Comparator<Object> {
 		public int compare(Object arg0, Object arg1) {
 			Bike bike0 = (Bike) arg0;
@@ -43,15 +46,13 @@ public class ViewInventory extends HttpServlet {
 		}
 	}
 
-	/* TODO - add bike name in DB
 	public static class ComparatorBikeName implements Comparator<Object> {
 		public int compare(Object arg0, Object arg1) {
 			Bike bike0 = (Bike) arg0;
 			Bike bike1 = (Bike) arg1;
-			return bike0.name.compareTo(bike1.name);
+			return bike0.getDescription().compareTo(bike1.getDescription());
 		}
 	}
-	*/
 	
 	public static String sortByPrice(List<Bike> bikelist) {
 		ComparatorPrice comparator = new ComparatorPrice();
@@ -66,7 +67,6 @@ public class ViewInventory extends HttpServlet {
 		return ret;
 	}
 	
-	/*TODO - add bike name in DB
 	public static String sortByName(List<Bike> bikelist) {
 		ComparatorBikeName comparator = new ComparatorBikeName();
 		Collections.sort(bikelist, comparator);
@@ -79,21 +79,9 @@ public class ViewInventory extends HttpServlet {
 		}
 		return ret;
 	}
-	*/
 
-	void showInventory(String orderby, List<Bike> bikes, PrintWriter out)
+	void showInventory(String allbike, PrintWriter out)
 	{
-		String allbike = "";
-		
-		if(orderby.equals("2") )
-		{
-			//allbike = sortByName(allList); 
-		}
-		else
-		{
-			allbike = sortByPrice(bikes);
-		}
-		
 		String title = "View Inventory";
 		out.print("<html><body><h1>" + title 
 				+ "</h1><p>"
@@ -129,8 +117,24 @@ public class ViewInventory extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		response.setCharacterEncoding("text/html;chaset=gbk");
 		String orderby = request.getParameter("orderby");
+		
+		String allbike = "";
+		if(bikes == null || bikesByName.isEmpty() || bikesByPrice.isEmpty())
+		{
+			bikes = getBikeInfoFromRetailDB();
+			bikesByName = sortByName(bikes); 
+			bikesByPrice = sortByPrice(bikes);
+		}
+	
+		if(orderby.equals("2") )
+		{
+			allbike = bikesByName;
+		}
+		else
+		{
+			allbike = bikesByPrice;
+		}
+		showInventory(allbike, out);
 
-		List<Bike> bikes = getBikeInfoFromRetailDB();
-		showInventory(orderby, bikes, out);
 	}
 }

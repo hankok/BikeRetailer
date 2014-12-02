@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -74,15 +75,28 @@ public class Signup extends HttpServlet {
 		catch (IOException e) {
 			e.printStackTrace();
 		};
-		User user = new User(username, password,customerName,address);
-		FileUtils.writeFile(user.toString(), "data/User.txt", true);
+		DBHelper dbhelper =  (DBHelper) getServletContext().getAttribute("dbHelper");
+		String values = "(" + username+ ",'"+ password + "','"+ customerName + "','"+ address + "')";
+		System.out.println("values:" + values);
 		try {
+			boolean ret = dbhelper.insertUser(values);
+			if(!ret)
+			{
+				out.print("<html><body><h1>" + "ERROR" 
+						+ "</h1><li>"
+						+ "user register failed, please use a different username" + "</li>");
+				out.print("</body></html>");
+				return;
+			}
 			response.sendRedirect("/myapp/Login.jsp");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};  
-
+		} catch (SQLException e1) {
+			out.print("<html><body><h1>" + "ERROR" 
+					+ "</h1><li>"
+					+ "user register failed, please use a different username" + "</li>");
+			out.print("</body></html>");
+			System.out.println("User registered exception on the retailer.");
+			response.sendRedirect("/myapp/Signup.jsp");
+		}
 		return;
 	}
 }

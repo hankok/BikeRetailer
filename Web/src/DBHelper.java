@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
+
+import Entity.User;
 
 import com.mysql.jdbc.MysqlDataTruncation;
 
@@ -92,8 +95,8 @@ public class DBHelper {
 	
 	public boolean insertOrder(String values) throws SQLException {
 		getConnection();
-		PreparedStatement stmt = connection.prepareStatement("insert into order(model_no,quantity) values?");
-		stmt.setString(1, values);
+		PreparedStatement stmt = connection.prepareStatement(
+				"insert into `order`(`customer`, `model_no`, `quantity`, `price`,`bike_name`) values "+values);
 		try {
 			stmt.executeUpdate();
 		} catch (MysqlDataTruncation ex) {
@@ -101,5 +104,75 @@ public class DBHelper {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean insertUser(String values) throws SQLException {
+		getConnection();
+		PreparedStatement stmt = connection.prepareStatement(
+				"insert into `customer`(`username`,`password`,`name`,`address`) values "+values);
+		try {
+			stmt.executeUpdate();
+		} catch (MysqlDataTruncation ex) {
+			System.out.println("User not registered on the retailer.");
+			return false;
+		}
+		return true;
+	}
+	
+	public Vector<String> getNameAddr(String username, String password) throws SQLException {
+		// if name and addr can be retrieved, then this user exists
+		Vector<String> result = new Vector<String>();
+		getConnection();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery
+				("select name,address from `customer` where `username` = " + username + " and `password`= '" + password +"'");
+		while(rs.next()) {
+			result.add(rs.getString("name"));
+			result.add(rs.getString("address")); 
+		}
+		return result;
+	}
+	
+	public ArrayList<User> getAllUsers() throws SQLException {
+		// if name and addr can be retrieved, then this user exists
+		ArrayList<User> result = new ArrayList<User>();
+		getConnection();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery
+				("select `username`,`password`,`name`,`address` from `customer`");
+		while(rs.next()) {
+			result.add(new User(rs.getString("name"), rs.getString("password"), rs.getString("name"), rs.getString("address")));
+		}
+		return result;
+	}
+	
+	public Vector<String> getOrders(String username) throws SQLException {
+		Vector<String> result = new Vector<String>();
+		getConnection();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery
+				("select * from `order` where `customer` = " + username);
+	    System.out.println("getOrders:" + "select * from `order` where `customer` = " + username);
+		while(rs.next()) {
+			result.add(rs.getString("order_id") + "," + rs.getString("customer")
+					+ "," + rs.getString("model_no") + "," + rs.getString("quantity")
+					+ "," + rs.getString("price") + "," + rs.getString("date")
+					+ "," + rs.getString("bike_name") + "," + rs.getString("status")
+					);
+		}
+		return result;
+	}
+	
+	public Vector<String> getNamePriceQty(String model_no) throws SQLException {
+		Vector<String> result = new Vector<String>();
+		getConnection();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("select description, price, quantity from inventory where model_no = " + model_no);
+		while(rs.next()) {
+			result.add(rs.getString(Constants.COLUMN_DESC));
+			result.add(rs.getString(Constants.COLUMN_PRICE)); // should be converted to double
+			result.add(rs.getString(Constants.COLUMN_QTY));   // should be converted to int
+		}
+		return result;
 	}
 }
