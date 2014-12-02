@@ -50,13 +50,6 @@ public class PlaceOrder extends HttpServlet {
 		return true;
 	}
 	
-	public boolean insertOrder(String values) {
-		
-		
-		return true;
-	}
-
-	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
@@ -169,6 +162,7 @@ public class PlaceOrder extends HttpServlet {
 					
 					
 					// if queue is down, set order status to -1
+					
 					
 					out.print("<html><body><h1>" + "INFO" 
 							+ "</h1><li>"

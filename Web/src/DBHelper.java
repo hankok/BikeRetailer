@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 import Entity.User;
@@ -174,5 +175,36 @@ public class DBHelper {
 			result.add(rs.getString(Constants.COLUMN_QTY));   // should be converted to int
 		}
 		return result;
+	}
+	
+	public int getQuantity(int modelNo) throws SQLException {
+		int quantity = 0;
+		getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT quantity FROM warehouse.inventory where model_no = ?;");
+		stmt.setInt(1, modelNo);
+		ResultSet result = stmt.executeQuery();
+		if(result.next()){
+			quantity = result.getInt(0);
+		}
+		return quantity;
+	}
+	
+	public boolean updateInventoryBatch(Map<String, Integer> inventoryMap) throws SQLException {
+		getConnection();
+		Statement stmt = connection.createStatement();
+		StringBuilder sqlUpdate = new StringBuilder();
+		Set<String> keys = inventoryMap.keySet();
+		for(String key : keys){
+			sqlUpdate.append("update inventory set quantity = quantity - "+inventoryMap.get(key)+" where model_no = '"+key+"'; ");
+		}
+		System.out.println(sqlUpdate.toString());
+		try {
+			stmt.addBatch(sqlUpdate.toString());
+			stmt.executeBatch();
+		} catch (MysqlDataTruncation ex) {
+			System.out.println("Not enough quantity to update model ");
+			return false;
+		}
+		return true;
 	}
 }
