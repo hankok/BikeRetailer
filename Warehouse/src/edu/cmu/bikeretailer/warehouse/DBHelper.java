@@ -90,17 +90,4 @@ public class DBHelper {
 		}
 		return true;
 	}
-	
-	public boolean insertOrder(String values) throws SQLException {
-		getConnection();
-		PreparedStatement stmt = connection.prepareStatement("insert into order(model_no,quantity) values?");
-		stmt.setString(1, values);
-		try {
-			stmt.executeUpdate();
-		} catch (MysqlDataTruncation ex) {
-			System.out.println("Order not placed on the retailer.");
-			return false;
-		}
-		return true;
-	}
 }
