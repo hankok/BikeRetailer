@@ -2,19 +2,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -23,15 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import Entity.Order;
-
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.sql.SQLException;
-import java.util.Date;
 
 
 @WebServlet("/PlaceOrder")
@@ -54,7 +35,6 @@ public class PlaceOrder extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setCharacterEncoding("text/html;chaset=gbk");
-		String title = "Place Order";
 		
 		String itemNosByComma = request.getParameter("itemNo");
 		String sQuantitysByComma = request.getParameter("sQuantity");
@@ -158,11 +138,18 @@ public class PlaceOrder extends HttpServlet {
 				boolean ret = dbhelper.insertOrder(values);
 				if(ret)
 				{
-					// Send message to queue
+					// TODO - Send message to queue
 					
-					
-					// if queue is down, set order status to -1
-					
+					// In the OrderQueueManager, if queue is down, store the msgs in a vector or list
+					// Initial status of an order is 0, 
+					// if shipped(receive the resp msg), then change the status to 1, 
+					// and send a mail to user (I used browser function to pop window in Login.java:40)
+					/* This is to trigger the popup, put it where you set the order complete
+					String urlStr = "http://localhost:8080/myapp/Login?username="+ URLEncoder.encode(customerName, "UTF-8") +"&password=a1b2c3";  
+					URL url1 = new URL(urlStr);  
+					URLConnection URLconnection = url1.openConnection();  
+					HttpURLConnection httpConnection = (HttpURLConnection)URLconnection;
+					*/
 					
 					out.print("<html><body><h1>" + "INFO" 
 							+ "</h1><li>"

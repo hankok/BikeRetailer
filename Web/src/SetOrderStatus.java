@@ -1,18 +1,10 @@
-
-
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Operation.FileUtils;
 
 @WebServlet("/SetOrderStatus")
 public class SetOrderStatus extends HttpServlet {
@@ -28,34 +20,10 @@ public class SetOrderStatus extends HttpServlet {
 		}
 		return true;
 	}
-	
-	public static String[] loadOrder() throws IOException {
-    	String order = FileUtils.readFile("data/Order.txt");
-    	return order.split("\n");
-	}
     
-	public String setOrder(int index, String status) throws IOException {
-		String orders[] = loadOrder();
-		String msg = "Order Status successfully set.";
-		
-		if(index < orders.length)
-		{
-			int i = orders[index].indexOf(";");
-			orders[index] = status + orders[index].substring(i,orders[index].length());
-		}
-		else
-		{
-			msg = "Order index out of range.";
-			return msg;
-		}
-		
-		String order = "";
-		for(int i=0; i<orders.length; i++)
-		{
-			order += orders[i]+'\n';
-		}
-		FileUtils.writeFile(order, "data/Order.txt", false);
-		return msg;
+	public boolean setOrder(int index, String status) throws IOException {
+
+		return true;
 	}
 	
 	protected void doGet(HttpServletRequest request,
@@ -83,8 +51,8 @@ public class SetOrderStatus extends HttpServlet {
 			out.print("</body></html>");
 			return;
 		}
-
-		String ret = setOrder(Integer.parseInt(sindex), status);
+		
+		boolean ret = setOrder(Integer.parseInt(sindex), status);
 		out.print("<html><body><h1>" + title 
 				+ "</h1><li>"
 				+ ret + "</li>");

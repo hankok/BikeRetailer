@@ -1,8 +1,6 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -11,10 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import Entity.Order;
 import Entity.User;
-import Operation.FileUtils;
-import Operation.Constants;
 
 public class MyServletContextListener implements ServletContextListener {
 	private ServletContext context = null;

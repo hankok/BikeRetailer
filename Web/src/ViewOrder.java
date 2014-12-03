@@ -2,9 +2,6 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Vector;
 
@@ -14,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import Operation.FileUtils;
 
 @WebServlet("/ViewOrder")
 public class ViewOrder extends HttpServlet {
