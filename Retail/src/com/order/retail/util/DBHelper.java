@@ -88,16 +88,19 @@ public class DBHelper {
 		return true;
 	}
 	
-	public int getQuantity(int modelNo) throws SQLException {
-		int quantity = 0;
+	public Double[] getItemDetails(int modelNo) throws SQLException {
 		getConnection();
-		PreparedStatement stmt = connection.prepareStatement("SELECT quantity FROM inventory where model_no = ?;");
+		Double[] retVal = new Double[2];
+		retVal[0] = -1.0;
+		retVal[1] = -1.0;
+		PreparedStatement stmt = connection.prepareStatement("SELECT price, quantity FROM inventory where model_no = ?;");
 		stmt.setInt(1, modelNo);
 		ResultSet result = stmt.executeQuery();
 		if(result.next()){
-			quantity = result.getInt(1);
+			retVal[0] = result.getDouble(2);
+			retVal[1] = result.getDouble(1);
 		}
-		return quantity;
+		return retVal;
 	}
 	
 	public List<Order> getOrders(int customerId) throws SQLException{
@@ -130,16 +133,18 @@ public class DBHelper {
 	
 	public boolean insertOrder(Order order) throws SQLException {
 		getConnection();
-		if (getQuantity(Integer.parseInt(order.getItemNumber())) >= order.getQuantity()) { 
-			PreparedStatement stmt = connection.prepareStatement("insert into order values (?, ?, ?, ?, ?, ?, ?, ?)");
-			stmt.setInt(1, order.getOrderId());
-			stmt.setInt(2, Integer.parseInt(order.getUserName()));
-			stmt.setInt(3, Integer.parseInt(order.getItemNumber()));
-			stmt.setInt(4, order.getQuantity());
-			stmt.setDouble(5, order.getPrice());
-			stmt.setDate(6, new java.sql.Date(new Date().getTime()));
-			stmt.setString(7, order.getItemName());
-			stmt.setInt(8, 0);
+		Double[] itemVal = getItemDetails(Integer.parseInt(order.getItemNumber()));
+		if (itemVal[0] == -1.0)
+			return false;
+		if (itemVal[1] >= order.getQuantity()) { 
+			PreparedStatement stmt = connection.prepareStatement("insert into order values (?, ?, ?, ?, ?, ?, ?)");
+			stmt.setString(1, order.getUserName());
+			stmt.setInt(2, Integer.parseInt(order.getItemNumber()));
+			stmt.setInt(3, order.getQuantity());
+			stmt.setDouble(4, itemVal[0] * order.getQuantity());
+			stmt.setDate(5, new java.sql.Date(new Date().getTime()));
+			stmt.setString(6, order.getItemName());
+			stmt.setInt(7, 0);
 			int res = stmt.executeUpdate();
 			return res != 0;
 		} else {
@@ -158,7 +163,11 @@ public class DBHelper {
 			user.setUserName(rs.getString("username"));
 			user.setPassword(rs.getString("password"));
 			user.setAddress(rs.getString("address"));
-			user.setFirstName(rs.getString("name"));
+			user.setFirstName(rs.getString("first_name"));
+			user.setLastName(rs.getString("last_name"));
+			user.setZipCode(rs.getString("zip"));
+			user.setState(rs.getString("state"));
+			user.setCity(rs.getString("city"));
 		}
 		return user;
 	}
@@ -176,11 +185,15 @@ public class DBHelper {
 	public boolean addUser(User user) throws SQLException {
 		if (getUser(user.getUserName()) != null) return false;
 		getConnection();
-		PreparedStatement stmt = connection.prepareStatement("insert into customer values (?, ?, ?, ?)");
-		stmt.setInt(1, Integer.parseInt(user.getUserName()));
+		PreparedStatement stmt = connection.prepareStatement("insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)");
+		stmt.setString(1, user.getUserName());
 		stmt.setString(2, user.getPassword());
 		stmt.setString(3, user.getFirstName());
-		stmt.setString(4, user.getAddress());
+		stmt.setString(4, user.getFirstName());
+		stmt.setString(5, user.getAddress());
+		stmt.setString(6, user.getCity());
+		stmt.setString(7, user.getState());
+		stmt.setString(8, user.getZipCode());
 		int res = stmt.executeUpdate();
 		return res != 0;
 	}
