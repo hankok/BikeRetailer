@@ -50,11 +50,12 @@ public class DBHelper {
 		}
 	}
 	
-	public List<Bike> getAllBikes() throws SQLException {
+	public List<Bike> getAllBikes(String orderby) throws SQLException {
 		List<Bike> bikeList = new ArrayList<>();
 		getConnection();
 		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery("select * from inventory");
+		ResultSet rs = stmt.executeQuery("select * from inventory order by " + orderby + " limit 50000 ");//limit 100
+
 		while(rs.next()) {
 			Bike bike = new Bike();
 			bike.setModelNumber(rs.getString(Constants.COLUMN_MODEL_NO));
@@ -64,6 +65,24 @@ public class DBHelper {
 			bikeList.add(bike);
 		}
 		return bikeList;
+	}
+	
+	public String getAllBikesToStr(String orderby) throws SQLException {
+		getConnection();
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery("select * from inventory order by " + orderby);//limit 100
+
+		StringBuffer buff = new StringBuffer();
+		System.out.println("Start convert rs to String");
+		while(rs.next()) {
+			buff.append(rs.getString(Constants.COLUMN_MODEL_NO) + ";")
+			.append(rs.getString(Constants.COLUMN_DESC) + ";")
+		    .append(rs.getString(Constants.COLUMN_PRICE) + ";")
+		    .append(rs.getString(Constants.COLUMN_QTY) + "<br>");
+		}
+		System.out.println("End convert rs to String");
+
+		return buff.toString();
 	}
 	
 	public Map<String, Integer> getInventory() throws SQLException {

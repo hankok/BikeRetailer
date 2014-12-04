@@ -54,7 +54,7 @@
             </table>
         
       </form>
-If already a member: <a href="/Final_AWS/Login.jsp">Log in</a>
+If already a member: <a href="Login.jsp">Log in</a>
     </center>
   </body>
 </html>

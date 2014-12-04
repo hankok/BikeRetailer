@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ViewInventory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	List<Bike> bikes = null;
-	String bikesByName = null;
-	String bikesByPrice = null;
+	String bikesByName = "";
+	String bikesByPrice = "";
 
 	public static class ComparatorPrice implements Comparator<Object> {
 		public int compare(Object arg0, Object arg1) {
@@ -70,9 +70,7 @@ public class ViewInventory extends HttpServlet {
 
 		String ret = "";
 		for (int i = 0; i < bikelist.size(); i++) {
-			Bike bike = (Bike) bikelist.get(i);
-			ret += bike.toString() + "<br><br>";
-			System.out.println(bike.toString()+'\n');
+			ret += bikelist.get(i).toString() + "<br>";
 		}
 		return ret;
 	}
@@ -86,18 +84,17 @@ public class ViewInventory extends HttpServlet {
 		out.print("</body></html>");
 	}
 	
-	public List<Bike> getBikeInfoFromRetailDB() throws RemoteException
+	public String getBikeInfoFromRetailDB(String orderby) throws RemoteException
 	{
-		List<Bike> bikes;
-		
+		String sbikes;
 		try {
 			DBHelper dbHelper =  (DBHelper) getServletContext().getAttribute("dbHelper");
-			bikes = dbHelper.getAllBikes();
+			sbikes = dbHelper.getAllBikesToStr(orderby);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RemoteException("Exception occured when accessing the database", e);
 		}
-		return bikes;
+		return sbikes;
 	}
 
 	/* may be usefull for mem sort
@@ -114,24 +111,24 @@ public class ViewInventory extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		response.setCharacterEncoding("text/html;chaset=gbk");
 		String orderby = request.getParameter("orderby");
-		
-		String allbike = "";
-		if(bikes == null || bikesByName.isEmpty() || bikesByPrice.isEmpty())
+
+		if(bikesByName.isEmpty() || bikesByPrice.isEmpty())
 		{
-			bikes = getBikeInfoFromRetailDB();
-			bikesByName = sortByName(bikes); 
-			bikesByPrice = sortByPrice(bikes);
+			bikesByName = "";
+			bikesByPrice = "";
+			bikesByName = getBikeInfoFromRetailDB("description");
+			bikesByPrice = getBikeInfoFromRetailDB("price");
 		}
 	
 		if(orderby.equals("2") )
 		{
-			allbike = bikesByName;
+			showInventory(bikesByName, out);
 		}
 		else
 		{
-			allbike = bikesByPrice;
+			showInventory(bikesByPrice, out);
 		}
-		showInventory(allbike, out);
+		
 
 	}
 }
