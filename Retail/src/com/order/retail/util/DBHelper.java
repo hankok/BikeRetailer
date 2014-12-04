@@ -131,13 +131,13 @@ public class DBHelper {
 		stmt.executeUpdate();
 	}
 	
-	public boolean insertOrder(Order order) throws SQLException {
+	public long insertOrder(Order order) throws SQLException {
 		getConnection();
 		Double[] itemVal = getItemDetails(Integer.parseInt(order.getItemNumber()));
 		if (itemVal[0] == -1.0)
-			return false;
+			return -1;
 		if (itemVal[1] >= order.getQuantity()) { 
-			PreparedStatement stmt = connection.prepareStatement("insert into order values (?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement stmt = connection.prepareStatement("insert into order values (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, order.getUserName());
 			stmt.setInt(2, Integer.parseInt(order.getItemNumber()));
 			stmt.setInt(3, order.getQuantity());
@@ -146,9 +146,19 @@ public class DBHelper {
 			stmt.setString(6, order.getItemName());
 			stmt.setInt(7, 0);
 			int res = stmt.executeUpdate();
-			return res != 0;
+			if (res == 0) {
+				return -1;
+			}
+			try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                return generatedKeys.getLong(1);
+	            }
+	            else {
+	                return -1;
+	            }
+	        }
 		} else {
-			return false;
+			return -2;
 		}
 	}
 	
