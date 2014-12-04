@@ -88,17 +88,16 @@ public class DBHelper {
 		return true;
 	}
 	
-	public Double[] getItemDetails(int modelNo) throws SQLException {
+	public String[] getItemDetails(int modelNo) throws SQLException {
 		getConnection();
-		Double[] retVal = new Double[2];
-		retVal[0] = -1.0;
-		retVal[1] = -1.0;
-		PreparedStatement stmt = connection.prepareStatement("SELECT price, quantity FROM inventory where model_no = ?;");
+		String[] retVal = new String[3];
+		PreparedStatement stmt = connection.prepareStatement("SELECT price, quantity, description FROM inventory where model_no = ?;");
 		stmt.setInt(1, modelNo);
 		ResultSet result = stmt.executeQuery();
 		if(result.next()){
-			retVal[0] = result.getDouble(2);
-			retVal[1] = result.getDouble(1);
+			retVal[0] = result.getString(1);
+			retVal[1] = result.getString(2);
+			retVal[2] = result.getString(3);
 		}
 		return retVal;
 	}
@@ -133,17 +132,17 @@ public class DBHelper {
 	
 	public long insertOrder(Order order) throws SQLException {
 		getConnection();
-		Double[] itemVal = getItemDetails(Integer.parseInt(order.getItemNumber()));
-		if (itemVal[0] == -1.0)
+		String[] itemVal = getItemDetails(Integer.parseInt(order.getItemNumber()));
+		if (itemVal[0] == null)
 			return -1;
-		if (itemVal[1] >= order.getQuantity()) { 
+		if (Integer.parseInt(itemVal[1]) >= order.getQuantity()) { 
 			PreparedStatement stmt = connection.prepareStatement("insert into order values (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, order.getUserName());
 			stmt.setInt(2, Integer.parseInt(order.getItemNumber()));
 			stmt.setInt(3, order.getQuantity());
-			stmt.setDouble(4, itemVal[0] * order.getQuantity());
+			stmt.setDouble(4, Double.parseDouble(itemVal[0]) * order.getQuantity());
 			stmt.setDate(5, new java.sql.Date(new Date().getTime()));
-			stmt.setString(6, order.getItemName());
+			stmt.setString(6, itemVal[2]);
 			stmt.setInt(7, 0);
 			int res = stmt.executeUpdate();
 			if (res == 0) {
